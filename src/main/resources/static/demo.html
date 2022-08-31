@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+
+<div id="app">
+
+    <h1 style="text-align: center">{{msg}}</h1>
+
+
+    <a href="demo2.html">用户信息增加</a>
+
+    <br>
+    <br>
+
+    <table style="width: 100%;height: 100px" border="1">
+        <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>工资</th>
+            <th>操作1</th>
+            <th>操作2</th>
+        </tr>
+
+        <tr style="text-align: center" v-for="emp in emps" :key="emp.id">
+            <th>{{emp.id}}</th>
+            <th>{{emp.name}}</th>
+            <th>{{emp.age}}</th>
+            <th>{{emp.salary}}</th>
+            <!--                加了一个默认行为阻止，相当于 href="javascript:;" 不进行跳转-->
+            <th><a href="javascript:;"  @click.prevent="update(emp.id)">修改</a></th>
+            <th><a href="" @click.prevent="deleteById(emp.id)" >删除</a></th>
+        </tr>
+    </table>
+
+    <br>
+    <br>
+
+</div>
+
+<script>
+    var a = new Vue({
+        el:"#app",
+        data:{
+            msg:"员工列表",
+            emps:[],
+            emp:{id:"",name:"",age:"",salary:""}
+        },
+        methods:{
+            update(id){
+                // 携带emp的id信息跳转到demo2.html
+                location.href = "demo3.html?id="+id;
+            },
+            deleteById(id){
+
+                // 在正式发送删除的请求给后端之前，先提示一下是否要删除，如果点击取消为false，那么不删除
+                if(!window.confirm("您确定要删除吗？")){
+                    return;
+                }
+
+                var _this = this;
+                // 根据员工id删除员工id
+                axios.delete("http://localhost:9090/emp/"+id).then(function (response) {
+                    alert(response.data);
+                    _this.selectAll();// 删完之后需要在查询一次更新列表
+
+                }).catch(function (error) {
+                    alert("接口访问失败!");
+                })
+
+            },selectAll(){
+                // 指代_this 就是vue实例本身
+                var _this = this;
+
+                // 给axios实例进行配置
+                var instance = axios.create({
+                    baseURL:"http://localhost:9090/",
+                    timeout:"5000"
+                })
+
+                // 发送查询全部的get请求
+                instance.get("emp").then(function (response) {
+                    _this.emps=response.data;// 将后端返回的列表数据在给到vue的 emps[] 中
+                }).catch(function (error) {
+                    alert("访问接口失败!");
+                });
+
+            }
+        },
+        computed:{},
+        created(){
+            this.selectAll();
+        }
+    })
+</script>
+
+</body>
+</html>

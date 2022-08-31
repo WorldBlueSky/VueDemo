@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+
+<div id="app2" style="width: 100%;height: auto;text-align: center">
+
+    <h1>{{msg}}</h1>
+
+    <br><br>
+
+    <a href="demo.html">返回主页</a>
+
+
+    <br><br>
+
+    <form action="">
+        员工姓名：<input type="text" v-model="emp.name"><br><br>
+        员工年龄：<input type="text" v-model="emp.age"><br><br>
+        员工薪水：<input type="text" v-model="emp.salary"><br><br>
+        <input type="button" @click="add" value="新增用户">
+    </form>
+</div>
+
+
+<script>
+    var a = new Vue({
+        el:"#app2",
+        data:{
+            msg:"员工信息增加",
+            emp:{name:"",age:"",salary:""}
+        },
+        methods:{
+            add(){
+                var _this = this;
+                // 发送axios异步请求，实现增加用户的操作
+                axios.post("http://localhost:9090/emp",_this.emp).then(function (resp) {
+                    alert(resp.data);
+                    _this.emp={name:"",age:"",salary:""};// 增加完之后重新置为空
+                }).catch(function (err) {
+                    alert("服务器异常!");
+                });
+            }
+        },
+        computed:{},
+        created(){
+
+        }
+    })
+</script>
+</body>
+</html>
