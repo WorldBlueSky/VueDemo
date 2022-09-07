@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Employee {
+public class Emp {
     private Integer id;
     private String name;
     private Integer age;

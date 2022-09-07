@@ -13,7 +13,7 @@
 
 <div id="app">
 
-    <h1 style="text-align: center">{{msg}}</h1>
+    <h1 style="text-align: center">{{msg}}--{{sub}}--{{sub}}--{{sub}}</h1>
 
 
     <a href="demo2.html">用户信息增加</a>
@@ -32,12 +32,12 @@
         </tr>
 
         <tr style="text-align: center" v-for="emp in emps" :key="emp.id">
-            <th>{{emp.id}}</th>
+            <th >{{emp.id}}</th>
             <th>{{emp.name}}</th>
             <th>{{emp.age}}</th>
             <th>{{emp.salary}}</th>
             <!--                加了一个默认行为阻止，相当于 href="javascript:;" 不进行跳转-->
-            <th><a href="javascript:;"  @click.prevent="update(emp.id)">修改</a></th>
+            <th><a href="javascript:;"    @click.prevent="update(emp.id)">修改</a></th>
             <th><a href="" @click.prevent="deleteById(emp.id)" >删除</a></th>
         </tr>
     </table>
@@ -45,12 +45,18 @@
     <br>
     <br>
 
+
+
 </div>
 
 <script>
+
+
+
     var a = new Vue({
         el:"#app",
         data:{
+            count:1,
             msg:"员工列表",
             emps:[],
             emp:{id:"",name:"",age:"",salary:""}
@@ -93,14 +99,28 @@
                 }).catch(function (error) {
                     alert("访问接口失败!");
                 });
+            },
+        },
+        computed:{
 
+
+
+            sub:function () {
+                console.log("计算一次count+10");
+                return this.count+10;
             }
         },
-        computed:{},
+
         created(){
             this.selectAll();
         }
     })
+
+    for(var i=0;i<10;i++){
+        console.log(i);
+    }
+
+    console.log(i);
 </script>
 
 </body>
